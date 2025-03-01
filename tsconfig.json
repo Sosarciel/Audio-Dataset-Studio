@@ -25,7 +25,8 @@
     "include": [
         "./src/**/*.ts",
         "./src/**/*.tsx",
-        "webpack.plugins.ts"
+        "webpack.plugins.ts",
+        "forge.config.ts"
     ],
     "exclude": ["./node_modules/**/*"]
 }
