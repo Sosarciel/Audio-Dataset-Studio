@@ -1,4 +1,4 @@
-import React, { MutableRefObject, ReactNode, Ref, RefObject, createRef, forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
+import React, { MutableRefObject, Ref, forwardRef, useEffect, useRef } from "react";
 import { AudioFileData } from "../AudioTookKitInterface";
 import { getWaveform, loadWaveform } from "../Util";
 import type { Region } from "wavesurfer.js/dist/plugins/regions";
@@ -9,7 +9,6 @@ import { SrtLineControlPanle } from "./SrtLineControlPanle";
 import WaveSurfer from "wavesurfer.js";
 import { AudioToolKitRef } from "../AudioToolKit";
 import { SrtSegment } from "@zwa73/utils";
-import { render } from 'react-dom';
 import { createRoot, Root } from "react-dom/client";
 
 export type SrtLineContainerProps = {

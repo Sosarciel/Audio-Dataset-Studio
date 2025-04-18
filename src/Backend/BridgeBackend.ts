@@ -1,7 +1,7 @@
 import { AllExtends, JToken, UtilFT, UtilFunc } from "@zwa73/utils";
 import { IpcMainInvokeEvent, app } from "electron";
 import fs from 'fs';
-import { splitWavByData } from "./Util";
+import { splitAudioByData } from "./Util";
 
 /**桥函数化 */
 const bridgeify = <F extends (...args: any[]) => any>(func:F):
@@ -35,7 +35,7 @@ export const BridgeBackend = {
     test(e: IpcMainInvokeEvent, text: string) {
         return text + 0;
     },
-    splitWavByData:bridgeify(splitWavByData),
+    splitAudioByData:bridgeify(splitAudioByData),
 };
 export type BridgeBackend = typeof BridgeBackend;
 

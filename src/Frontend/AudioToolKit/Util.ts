@@ -49,7 +49,7 @@ export function parseFileName(file:File){
     return { name: fileName, ext: '' };
 }
 
-const vaildAudio = ['wav'];
+const vaildAudio = ['wav','flac'];
 const vaildSrt   = ['srt'];
 export async function getFileData(file:File){
     return new Promise<AudioFileData|SrtFileData|undefined>((reslove)=>{

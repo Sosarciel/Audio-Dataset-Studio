@@ -186,7 +186,7 @@ export const WaveformContainer= forwardRef((props:WaveformContainerProps,ref:Ref
             const outDir = path.parse(baseAudioPath).dir;
 
             //执行音频切分
-            await BridgeProxy.splitWavByData(jsonseq.lines.map((seg,index)=>({
+            await BridgeProxy.splitAudioByData(jsonseq.lines.map((seg,index)=>({
                 seg,index,inFilePath:baseAudioPath,outDir
             })));
         },
