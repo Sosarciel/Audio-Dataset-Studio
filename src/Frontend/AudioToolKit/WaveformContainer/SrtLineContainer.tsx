@@ -202,22 +202,22 @@ export const SrtLineContainer= forwardRef((props:SrtLineContainerProps,ref:Ref<S
         setIndex:(i)=>datas.current.segmentsIndex = i,
         getSrtData:()=>{
             const reg = datas.current.mainRegion!;
-            let result = "";
-            const refn = (node:ChildNode)=>{
+            const refn = (node: ChildNode): string => {
                 if (node.nodeType === Node.TEXT_NODE)
-                    result += node.textContent;
+                    return node.textContent ?? "";
                 else if (node.nodeName === "BR")
-                    result += "\n";
-                else if (node.nodeType === Node.ELEMENT_NODE){
-                    node?.childNodes.forEach(refn);
-                    result += "\n";
-                }
+                    return "\n";
+                else if (node.nodeType === Node.ELEMENT_NODE)
+                    return Array.from(node.childNodes).map(refn).join("") + "\n";
+                return "";
             };
-            reg.content?.childNodes.forEach(refn);
+
+            const result = reg.content?.childNodes
+                ? Array.from(reg.content.childNodes).map(refn).join("") : "";
             return {
-                end  :reg.end  *1000,
-                start:reg.start*1000,
-                text :result.replace(/\r\n/g,"\n").trim(),
+                end  :Math.round(reg.end  *1000),
+                start:Math.round(reg.start*1000),
+                text :result.replace(/\r\n/g,"\n").replace(/\n\n/g,'\n').trim(),
             };
         },
         reAlign:()=>{
