@@ -23,7 +23,7 @@ export type SrtLineContainer = {
     getData:()=>SrtLineContainerData;
     updatePanel:()=>void;
     /**重新对焦 */
-    refocus:(bonus?:number)=>void;
+    refocus:(init?:boolean)=>void;
     /**重设索引键 */
     setIndex:(i:number)=>void;
     getSrtData:()=>SrtSegment;
@@ -33,8 +33,10 @@ export type SrtLineContainer = {
     play:()=>Promise<void>;
     isPlaying:()=>boolean;
     getPanel: () => SrtLineControlPanle | null;
-    /**设置缩放偏移 */
-    addZoomBonus: (bonus:number)=>void;
+    /**设置缩放偏移
+     * @param sign - 正为放大, 负为缩小
+     */
+    modifyZoom: (sign:number)=>void;
     setCurrentSrtLine:()=>void;
 };
 
@@ -210,16 +212,16 @@ export const SrtLineContainer= forwardRef((props:SrtLineContainerProps,ref:Ref<S
     const localRef:React.MutableRefObject<SrtLineContainer> = UtilRH.useLocalRef<SrtLineContainer>(ref,()=>({
         getData:()=>datas.current!,
         updatePanel:()=>panelRef.current?.forceUpdate(),
-        refocus:(bonus)=>{
+        refocus:(init)=>{
             const cur = datas.current;
-            cur.zoomBonus = bonus??0.5;
+            if(init) cur.zoomBonus = 0.5;
 
             if(containerRef.current==undefined) return;
 
             const {regionWidth,zoomLevel} = recalcSize(containerRef.current,cur);
 
             cur.waveform?.zoom(zoomLevel);
-            if(bonus==null)
+            if(init)
                 cur.waveform?.setScrollTime(datas.current.mainRegion!.start - regionWidth/2);
         },
         setIndex:(i)=>datas.current.segmentsIndex = i,
@@ -268,10 +270,12 @@ export const SrtLineContainer= forwardRef((props:SrtLineContainerProps,ref:Ref<S
         pause:()=>datas.current.waveform?.pause(),
         setCurrentSrtLine:()=>AudioToolKitRef.current?.setCurrentSrtLine(localRef.current),
         getPanel:()=>panelRef.current,
-        addZoomBonus:(bonus)=>{
+        modifyZoom:(sign)=>{
             const cur = datas.current;
-            cur.zoomBonus += bonus;
-            localRef.current.refocus(cur.zoomBonus);
+            cur.zoomBonus = Math.sign(sign)>0
+                ? cur.zoomBonus + Math.max(0.1, Math.floor(cur.zoomBonus/5))
+                : Math.max(0.1, cur.zoomBonus - Math.max(0.1, Math.floor(cur.zoomBonus/5)));
+            localRef.current.refocus(false);
         }
     }),[]);
 

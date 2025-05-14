@@ -105,7 +105,7 @@ const _AudioToolKit = forwardRef((props:{},ref:Ref<AudioToolKit>) => {
         //console.log('deltaY',event.deltaY);
         //event.preventDefault();
 
-        AudioToolKitData.currentSrtLine.addZoomBonus(Math.sign(event.deltaY)*0.5);
+        AudioToolKitData.currentSrtLine.modifyZoom(Math.sign(event.deltaY)*0.1);
     };
 
     useEffect(()=>{
