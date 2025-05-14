@@ -60,7 +60,7 @@ export async function getFileData(file:File){
 
         const reader = new FileReader();
         if(vaildAudio.includes(pname.ext)){
-            reader.onload = (e) => reslove({
+            reader.onload = e => reslove({
                 blob:new Blob([e.target!.result!],{type:`audio/${pname.ext}`}),
                 file,path,
                 type:"Audio",
@@ -69,7 +69,7 @@ export async function getFileData(file:File){
             reader.readAsArrayBuffer(file);
         }
         if(vaildSrt.includes(pname.ext)) {
-            reader.onload = (e) => reslove({
+            reader.onload = e => reslove({
                 text:e.target!.result as string,
                 file,path,
                 type:"Srt",

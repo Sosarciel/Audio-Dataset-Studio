@@ -32,6 +32,7 @@ export type AudioToolKit = {
     removeWaveform:(name:string)=>void;
     saveToJson:()=>SavedProjectData;
     getReactData:()=>typeof AudioToolKitData;
+    /**获取 filename: WaveformContainer map */
     getWavefromeMap:()=>WavefromeMap;
 };
 
@@ -57,10 +58,13 @@ const _AudioToolKit = forwardRef((props:{},ref:Ref<AudioToolKit>) => {
         const newFiles = Array.from(event.dataTransfer.files);
 
         void (async ()=>{
-            const nbs = await Promise.all(newFiles.map(async (file)=> getFileData(file)));
-            const srts = nbs.filter((d)=>d!=undefined && d.type=="Srt") as SrtFileData[];
-            const audios = nbs.filter((d)=>d!=undefined && d.type=="Audio") as AudioFileData[];
-            audios.forEach((d)=>{
+            const nbs = (await Promise.all(newFiles.map(async file => getFileData(file))))
+                .filter(v=>v!=undefined)
+                .sort((a,b)=>a.name.localeCompare(b.name));
+
+            const srts = nbs.filter( d =>d.type=="Srt") as SrtFileData[];
+            const audios = nbs.filter( d =>d.type=="Audio") as AudioFileData[];
+            audios.forEach(d =>{
                 AudioToolKitFileTable[d.name] ??={};
 
                 const ref = createRef<WaveformContainer>();
@@ -72,7 +76,7 @@ const _AudioToolKit = forwardRef((props:{},ref:Ref<AudioToolKit>) => {
                 waveformeMap[d.name]={ref,node};
                 AudioToolKitFileTable[d.name].audio=d;
             });
-            srts.forEach((d)=>{
+            srts.forEach( d =>{
                 AudioToolKitFileTable[d.name] ??={};
                 AudioToolKitFileTable[d.name].srt=d;
             });
@@ -83,7 +87,7 @@ const _AudioToolKit = forwardRef((props:{},ref:Ref<AudioToolKit>) => {
     useEffect(()=>{
         void (async ()=>{
             console.log(await BridgeProxy.test('bridgetest'));
-            await Promise.all(newSrts.map(async (d)=>
+            await Promise.all(newSrts.map(async d =>
                 waveformeMap[d.name]?.ref?.current?.loadSrt(d)));
         })();
     },[newSrts]);

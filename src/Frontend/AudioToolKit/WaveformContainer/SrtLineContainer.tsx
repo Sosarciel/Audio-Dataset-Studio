@@ -147,9 +147,17 @@ export const SrtLineContainer= forwardRef((props:SrtLineContainerProps,ref:Ref<S
                 panelRef.current?.forceUpdate();
             });
 
-            containerRef.current?.addEventListener("click", (e) => {
-                const srtLines = waveformContainer.current.getSrtLines();
-                srtLines.forEach((s)=> (s.ref.current?.getData().segmentsIndex == datas.current.segmentsIndex) || s.ref.current?.pause());
+            containerRef.current?.addEventListener("click", e => {
+                const cur = waveformContainer.current;
+                Object.values(AudioToolKitRef.current?.getWavefromeMap()??{}).forEach( con =>{
+                    const concur = con.ref?.current;
+                    if(concur==null) return;
+                    const srtLines = concur.getSrtLines()??[];
+                    srtLines.forEach(srt => {
+                        if(concur==cur && srt.ref.current?.getData().segmentsIndex == datas.current.segmentsIndex) return;
+                        srt.ref.current?.pause();
+                    });
+                });
             });
 
             //初始对焦
