@@ -22,7 +22,7 @@ export function getWaveform(container:HTMLDivElement){
     });
 
     waveform.on("ready", () => {
-        container.addEventListener("click", (e) => {
+        container.addEventListener("click", e => {
             if(waveform.isPlaying())
                 waveform.pause();
             else void waveform.play();

@@ -23,7 +23,7 @@ export type SrtLineContainer = {
     getData:()=>SrtLineContainerData;
     updatePanel:()=>void;
     /**重新对焦 */
-    refocus:()=>void;
+    refocus:(bonus?:number)=>void;
     /**重设索引键 */
     setIndex:(i:number)=>void;
     getSrtData:()=>SrtSegment;
@@ -33,6 +33,9 @@ export type SrtLineContainer = {
     play:()=>Promise<void>;
     isPlaying:()=>boolean;
     getPanel: () => SrtLineControlPanle | null;
+    /**设置缩放偏移 */
+    addZoomBonus: (bonus:number)=>void;
+    setCurrentSrtLine:()=>void;
 };
 
 
@@ -45,6 +48,8 @@ export type SrtLineContainerData = {
     mainRegion?:Region;
     waveform?:WaveSurfer;
     contentRoot?:Root;
+    /**缩放修正 */
+    zoomBonus:number;
 };
 
 /**计算焦点位置数据 */
@@ -55,7 +60,7 @@ function recalcSize(el:HTMLDivElement ,data:SrtLineContainerData){
 
     return{
         regionWidth,
-        zoomLevel   : (data.duration * containerWidth * 0.5) / regionWidth,
+        zoomLevel   : (data.duration * containerWidth * data.zoomBonus) / regionWidth,
     };
 }
 
@@ -83,6 +88,7 @@ export const SrtLineContainer= forwardRef((props:SrtLineContainerProps,ref:Ref<S
         segmentsIndex  : props.segmentsIndex,
         duration       : 1,
         isAlign        : true,
+        zoomBonus      : 0.5,
     });
 
     useEffect(() => {
@@ -105,7 +111,7 @@ export const SrtLineContainer= forwardRef((props:SrtLineContainerProps,ref:Ref<S
             const elements = srtSegment.text
                 .split("\n")
                 .reduce<JSX.Element[]>((acc, str, index) => {
-                    console.log(str);
+                    //console.log(str);
                     acc.push(<React.Fragment key={Math.random()}>{str}</React.Fragment>);
                     if (index < srtSegment.text.split("\n").length - 1)
                         acc.push(<br key={Math.random()} />);
@@ -149,6 +155,10 @@ export const SrtLineContainer= forwardRef((props:SrtLineContainerProps,ref:Ref<S
 
             containerRef.current?.addEventListener("click", e => {
                 const cur = waveformContainer.current;
+                cur.getSrtLines().forEach(srt=>{
+                    if(srt.ref.current?.getData().segmentsIndex == datas.current.segmentsIndex)
+                        srt.ref.current?.setCurrentSrtLine();
+                });
                 Object.values(AudioToolKitRef.current?.getWavefromeMap()??{}).forEach( con =>{
                     const concur = con.ref?.current;
                     if(concur==null) return;
@@ -197,15 +207,20 @@ export const SrtLineContainer= forwardRef((props:SrtLineContainerProps,ref:Ref<S
     }, []);
 
 
-    const localRef = UtilRH.useLocalRef<SrtLineContainer>(ref,()=>({
+    const localRef:React.MutableRefObject<SrtLineContainer> = UtilRH.useLocalRef<SrtLineContainer>(ref,()=>({
         getData:()=>datas.current!,
         updatePanel:()=>panelRef.current?.forceUpdate(),
-        refocus:()=>{
+        refocus:(bonus)=>{
             const cur = datas.current;
+            cur.zoomBonus = bonus??0.5;
+
             if(containerRef.current==undefined) return;
+
             const {regionWidth,zoomLevel} = recalcSize(containerRef.current,cur);
+
             cur.waveform?.zoom(zoomLevel);
-            cur.waveform?.setScrollTime(datas.current.mainRegion!.start - regionWidth/2);
+            if(bonus==null)
+                cur.waveform?.setScrollTime(datas.current.mainRegion!.start - regionWidth/2);
         },
         setIndex:(i)=>datas.current.segmentsIndex = i,
         getSrtData:()=>{
@@ -251,7 +266,13 @@ export const SrtLineContainer= forwardRef((props:SrtLineContainerProps,ref:Ref<S
         isPlaying:()=>datas.current.waveform?.isPlaying() ?? false,
         play:async ()=>datas.current.waveform?.play(),
         pause:()=>datas.current.waveform?.pause(),
+        setCurrentSrtLine:()=>AudioToolKitRef.current?.setCurrentSrtLine(localRef.current),
         getPanel:()=>panelRef.current,
+        addZoomBonus:(bonus)=>{
+            const cur = datas.current;
+            cur.zoomBonus += bonus;
+            localRef.current.refocus(cur.zoomBonus);
+        }
     }),[]);
 
     return <Card cardStyle={cardStyle}>

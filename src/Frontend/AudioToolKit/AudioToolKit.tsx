@@ -6,6 +6,7 @@ import { AudioFileData, SrtFileData } from "./AudioTookKitInterface";
 import { getFileData } from "./Util";
 import { BridgeProxy } from "Frontend";
 import { SavedProjectData } from "@/src/Backend/ProjectData";
+import { SrtLineContainer } from "./WaveformContainer/SrtLineContainer";
 
 
 const Container = styled.div`
@@ -34,15 +35,29 @@ export type AudioToolKit = {
     getReactData:()=>typeof AudioToolKitData;
     /**获取 filename: WaveformContainer map */
     getWavefromeMap:()=>WavefromeMap;
+    /**设置当前选择的srtline */
+    setCurrentSrtLine:(srtLine?:SrtLineContainer)=>void;
 };
 
-const AudioToolKitData = {
+type AudioToolKitData = {
+    /**吸附步长精度 小于0则不启用 */
+    stepPrecision: number;
+    /**追加时间 */
+    additionalTime: number;
+    /**行高 */
+    lineHeight: number;
+    /**选中的srtLine */
+    currentSrtLine: SrtLineContainer|undefined;
+};
+const AudioToolKitData:AudioToolKitData = {
     /**吸附步长精度 小于0则不启用 */
     stepPrecision: 0.1,
     /**追加时间 */
     additionalTime: 0,
     /**行高 */
     lineHeight: 128,
+    /**选中的srtLine */
+    currentSrtLine: undefined,
 };
 
 const _AudioToolKit = forwardRef((props:{},ref:Ref<AudioToolKit>) => {
@@ -58,8 +73,8 @@ const _AudioToolKit = forwardRef((props:{},ref:Ref<AudioToolKit>) => {
         const newFiles = Array.from(event.dataTransfer.files);
 
         void (async ()=>{
-            const nbs = (await Promise.all(newFiles.map(async file => getFileData(file))))
-                .filter(v=>v!=undefined)
+            const nbs = ((await Promise.all(newFiles.map(async file => getFileData(file))))
+                .filter(v=>v!=undefined) as (SrtFileData | AudioFileData)[])
                 .sort((a,b)=>a.name.localeCompare(b.name));
 
             const srts = nbs.filter( d =>d.type=="Srt") as SrtFileData[];
@@ -82,6 +97,15 @@ const _AudioToolKit = forwardRef((props:{},ref:Ref<AudioToolKit>) => {
             });
             setNewSrts(srts);
         })();
+    };
+
+    const handleWheelZoom = (event: React.WheelEvent<HTMLDivElement>) => {
+        if (!event.ctrlKey || AudioToolKitData.currentSrtLine==null) return;
+        //console.log('handleWheelZoom');
+        //console.log('deltaY',event.deltaY);
+        //event.preventDefault();
+
+        AudioToolKitData.currentSrtLine.addZoomBonus(Math.sign(event.deltaY)*0.5);
     };
 
     useEffect(()=>{
@@ -107,11 +131,12 @@ const _AudioToolKit = forwardRef((props:{},ref:Ref<AudioToolKit>) => {
         },
         getReactData:()=>reactDatas,
         getWavefromeMap:()=>waveformeMap,
+        setCurrentSrtLine:(srtLine)=>AudioToolKitData.currentSrtLine=srtLine,
     }),[waveformeMap]);
 
 
     return (
-        <Container onDrop={handleDrop} onDragOver={UtilRT.preventDefaultEvent}>
+        <Container onDrop={handleDrop} onDragOver={UtilRT.preventDefaultEvent} onWheel={handleWheelZoom}>
             {Object.values(waveformeMap).map((dat) => dat.node)}
         </Container>
     );
