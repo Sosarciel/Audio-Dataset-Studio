@@ -126,6 +126,8 @@ export const SrtLineContainer= forwardRef((props:SrtLineContainerProps,ref:Ref<S
                 const reg = cur.mainRegion;
                 if(reg==null) return;
 
+                const pos = cur.waveform?.getScroll();
+
                 const stepPrecision = AudioToolKitRef.current!.getReactData().stepPrecision;
                 if(stepPrecision>0){
                     reg.start = Math.round(reg.start / stepPrecision) * stepPrecision;
@@ -153,6 +155,8 @@ export const SrtLineContainer= forwardRef((props:SrtLineContainerProps,ref:Ref<S
 
                 reg._onUpdate(0);
                 panelRef.current?.forceUpdate();
+                if(pos!=undefined)
+                    cur.waveform?.setScroll(pos);
             });
 
             containerRef.current?.addEventListener("click", e => {
