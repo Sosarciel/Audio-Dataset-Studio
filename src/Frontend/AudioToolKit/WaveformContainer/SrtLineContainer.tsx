@@ -253,6 +253,8 @@ export const SrtLineContainer= forwardRef((props:SrtLineContainerProps,ref:Ref<S
             const cur = datas.current;
             if(cur.mainRegion==null) return;
 
+            const pos = cur.waveform?.getScroll();
+
             const srtLines = waveformContainer.current.getSrtLines();
             const preend = srtLines[cur.segmentsIndex-1]?.ref.current?.getData().mainRegion?.end ?? 0;
             const nextstart = srtLines[cur.segmentsIndex+1]?.ref.current?.getData().mainRegion?.start ?? waveformContainer.current.getData().duration;
@@ -268,6 +270,8 @@ export const SrtLineContainer= forwardRef((props:SrtLineContainerProps,ref:Ref<S
 
             cur.mainRegion._onUpdate(0);
             panelRef.current?.forceUpdate();
+            if(pos!=undefined)
+                cur.waveform?.setScroll(pos);
         },
         isPlaying:()=>datas.current.waveform?.isPlaying() ?? false,
         play:async ()=>datas.current.waveform?.play(),
