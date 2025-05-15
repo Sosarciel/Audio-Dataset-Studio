@@ -216,7 +216,7 @@ export const SrtLineContainer= forwardRef((props:SrtLineContainerProps,ref:Ref<S
     const localRef:React.MutableRefObject<SrtLineContainer> = UtilRH.useLocalRef<SrtLineContainer>(ref,()=>({
         getData:()=>datas.current!,
         updatePanel:()=>panelRef.current?.forceUpdate(),
-        refocus:(init)=>{
+        refocus:(init=true)=>{
             const cur = datas.current;
             if(init) cur.zoomBonus = 0.5;
 
