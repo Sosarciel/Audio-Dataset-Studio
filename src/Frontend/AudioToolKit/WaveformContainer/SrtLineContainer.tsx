@@ -89,7 +89,7 @@ export const SrtLineContainer= forwardRef((props:SrtLineContainerProps,ref:Ref<S
     const datas = useRef<SrtLineContainerData>({
         segmentsIndex  : props.segmentsIndex,
         duration       : 1,
-        isAlign        : true,
+        isAlign        : false,
         zoomBonus      : 0.5,
     });
 

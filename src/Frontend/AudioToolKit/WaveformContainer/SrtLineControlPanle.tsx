@@ -50,7 +50,7 @@ const timeCardStyle = css`
 
 export const SrtLineControlPanle = forwardRef((props:SrtLineControlPanleProp,ref:Ref<SrtLineControlPanle>)=>{
     const {srtLineContainer,waveformContainer} = props;
-    const [lockText,setLockText] = useState("已对齐");
+    const [lockText,setLockText] = useState("未对齐");
     const [fu,forceUpdate] = UtilRH.useForceUpdate(); // 用于强制更新
 
     const changeAlign = (forceAlign=true)=>{
