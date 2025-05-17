@@ -91,6 +91,7 @@ export async function loadWaveform(waveform:WaveSurfer,data:AudioFileData,useCac
         waveformCache[key] = new Promise((reslove)=>{
             waveform.on('decode',()=>{
                 const dur = waveform.getDuration();
+                //peak精度为1/256
                 reslove({
                     peaks:waveform.exportPeaks({maxLength:dur*256}),
                     dur,
