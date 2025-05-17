@@ -30,7 +30,10 @@ export type SrtLineControlPanleProp = {
 }
 export type SrtLineControlPanle = {
     forceUpdate:()=>void;
-    changeAlign:()=>void;
+    /**修改对齐状态
+     * @param forceAlign - 立即对齐内容 默认 true
+     */
+    changeAlign:(forceAlign?:boolean)=>void;
 }
 
 const timeCardStyle = css`
@@ -50,22 +53,28 @@ export const SrtLineControlPanle = forwardRef((props:SrtLineControlPanleProp,ref
     const [lockText,setLockText] = useState("已对齐");
     const [fu,forceUpdate] = UtilRH.useForceUpdate(); // 用于强制更新
 
-    const changeAlign = ()=>{
+    const changeAlign = (forceAlign=true)=>{
         const dat = srtLineContainer.current.getData();
         dat.isAlign = !dat.isAlign;
-        if(dat.isAlign) setLockText("已对齐");
-        else setLockText("未对齐");
-        srtLineContainer.current.reAlign();
+        if(dat.isAlign)
+            setLockText("已对齐");
+        else
+            setLockText("未对齐");
+        if(forceAlign)
+            srtLineContainer.current.reAlign();
     };
 
-    const refocus = ()=>{
+    const onChangeAlign = ()=>{
+        changeAlign();
+    };
+    const onRefocus = ()=>{
         srtLineContainer.current.refocus();
     };
 
-    const del = ()=>{
+    const onDel = ()=>{
         waveformContainer.current.removeSrtLine(srtLineContainer.current.getData().segmentsIndex);
     };
-    const add = ()=>{
+    const onAdd = ()=>{
         waveformContainer.current.addSrtLine(srtLineContainer.current.getData().segmentsIndex);
     };
 
@@ -81,10 +90,10 @@ export const SrtLineControlPanle = forwardRef((props:SrtLineControlPanleProp,ref
 
 
     return <Card cardStyle={fixStyle} >
-        <Button cardStyle={buttonStyle} content={lockText} onClick={changeAlign} tooltip="切换紧密对齐"  tooltipStyle={audioTookKitTooltipBoard}/>
-        <Button cardStyle={buttonStyle} content="对焦" onClick={refocus} tooltip="重设焦点至区域"         tooltipStyle={audioTookKitTooltipBoard}/>
-        <Button cardStyle={buttonStyle} content="删除" onClick={del} tooltip="删除此行"               tooltipStyle={audioTookKitTooltipBoard}/>
-        <Button cardStyle={buttonStyle} content="添加" onClick={add} tooltip="在此行下方新增"         tooltipStyle={audioTookKitTooltipBoard}/>
+        <Button cardStyle={buttonStyle} content={lockText} onClick={onChangeAlign} tooltip="切换紧密对齐"  tooltipStyle={audioTookKitTooltipBoard}/>
+        <Button cardStyle={buttonStyle} content="对焦" onClick={onRefocus} tooltip="重设焦点至区域"         tooltipStyle={audioTookKitTooltipBoard}/>
+        <Button cardStyle={buttonStyle} content="删除" onClick={onDel} tooltip="删除此行"               tooltipStyle={audioTookKitTooltipBoard}/>
+        <Button cardStyle={buttonStyle} content="添加" onClick={onAdd} tooltip="在此行下方新增"         tooltipStyle={audioTookKitTooltipBoard}/>
         <Card cardStyle={timeCardStyle}>
             <div>{String(parseFloat(srtLineContainer.current.getData().mainRegion?.start.toFixed(3)??"")) + '->'}</div>
             <div>{String(parseFloat(srtLineContainer.current.getData().mainRegion?.end.toFixed(3)??""))}</div>

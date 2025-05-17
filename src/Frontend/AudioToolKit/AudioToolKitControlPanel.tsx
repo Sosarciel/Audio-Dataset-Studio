@@ -167,7 +167,7 @@ const _AudioToolKitControlPanel = forwardRef<AudioToolKitControlPanel>((prop:{},
                 const srtLineContainer = s.ref.current;
                 if(srtLineContainer==null) return;
                 const panle = srtLineContainer.getPanel();
-                panle?.changeAlign();
+                panle?.changeAlign(false);
             }))
         );
     };

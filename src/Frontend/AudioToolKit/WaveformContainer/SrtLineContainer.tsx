@@ -144,8 +144,8 @@ export const SrtLineContainer= forwardRef((props:SrtLineContainerProps,ref:Ref<S
                 const srtLines = waveformContainer.current.getSrtLines();
 
                 if(cur.segmentsIndex>0){
-                    const preline = srtLines[cur.segmentsIndex-1];
-                    preline.ref.current?.reAlign();
+                    const preLine = srtLines[cur.segmentsIndex-1];
+                    preLine.ref.current?.reAlign();
                 }
 
                 if(cur.segmentsIndex<srtLines.length-1){
@@ -256,16 +256,18 @@ export const SrtLineContainer= forwardRef((props:SrtLineContainerProps,ref:Ref<S
             const pos = cur.waveform?.getScroll();
 
             const srtLines = waveformContainer.current.getSrtLines();
-            const preend = srtLines[cur.segmentsIndex-1]?.ref.current?.getData().mainRegion?.end ?? 0;
-            const nextstart = srtLines[cur.segmentsIndex+1]?.ref.current?.getData().mainRegion?.start ?? waveformContainer.current.getData().duration;
+            const preEnd = srtLines[cur.segmentsIndex-1]?.ref.current?.getData().mainRegion?.end ?? 0;
+            const nextStart = srtLines[cur.segmentsIndex+1]?.ref.current?.getData().mainRegion?.start ?? waveformContainer.current.getData().duration;
 
             //如果未对齐则只控制超出部分
             if(!cur.isAlign){
-                if(cur.mainRegion.start < preend) cur.mainRegion.start = preend;
-                if(cur.mainRegion.end > nextstart) cur.mainRegion.end = nextstart;
+                if(cur.mainRegion.start < preEnd)
+                    cur.mainRegion.start = preEnd;
+                if(cur.mainRegion.end > nextStart)
+                    cur.mainRegion.end = nextStart;
             }else{
-                cur.mainRegion.start = preend;
-                cur.mainRegion.end = nextstart;
+                cur.mainRegion.start = preEnd;
+                cur.mainRegion.end = nextStart;
             }
 
             cur.mainRegion._onUpdate(0);
