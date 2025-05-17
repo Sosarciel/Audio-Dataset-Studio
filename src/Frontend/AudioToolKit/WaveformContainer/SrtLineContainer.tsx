@@ -280,11 +280,13 @@ export const SrtLineContainer= forwardRef((props:SrtLineContainerProps,ref:Ref<S
         getPanel:()=>panelRef.current,
         modifyZoom:(sign)=>{
             const cur = datas.current;
-            const step = Math.floor(cur.zoomBonus/2.5);
+            const factor = 2.5;
+            const step = Math.floor(cur.zoomBonus/factor);
             const min = 0.1;
+            const minStep = Math.max(min, step);
             cur.zoomBonus = Math.sign(sign)>0
-                ? cur.zoomBonus + Math.max(min, step)
-                : Math.max(min, cur.zoomBonus - Math.max(min, step));
+                ? cur.zoomBonus + minStep
+                : Math.max(min, cur.zoomBonus - minStep);
             localRef.current.refocus(false);
         }
     }),[]);
