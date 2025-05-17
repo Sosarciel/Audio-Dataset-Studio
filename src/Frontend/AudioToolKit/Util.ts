@@ -92,7 +92,7 @@ export async function loadWaveform(waveform:WaveSurfer,data:AudioFileData,useCac
             waveform.on('decode',()=>{
                 const dur = waveform.getDuration();
                 reslove({
-                    peaks:waveform.exportPeaks({maxLength:dur*128}),
+                    peaks:waveform.exportPeaks({maxLength:dur*256}),
                     dur,
                 });
             });
