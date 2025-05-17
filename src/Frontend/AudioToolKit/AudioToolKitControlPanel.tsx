@@ -61,6 +61,7 @@ const _AudioToolKitControlPanel = forwardRef<AudioToolKitControlPanel>((prop:{},
     const spRef = useRef<TextCard>(null);
     const apRef = useRef<TextCard>(null);
     const hgRef = useRef<TextCard>(null);
+    const ppRef = useRef<TextCard>(null);
 
     const onSpChanged = ()=>{
         const mod = spRef.current?.getText();
@@ -116,6 +117,19 @@ const _AudioToolKitControlPanel = forwardRef<AudioToolKitControlPanel>((prop:{},
         //        srtLineContainer.updatePanel();
         //    }))
         //);
+    };
+
+    const onPpChange = async ()=>{
+        const mod = ppRef.current?.getText();
+        if(mod==undefined) return;
+        const numMod = parseInt(mod);
+
+        if(isNaN(numMod) || numMod<10 ){
+            ppRef.current?.setText(`${AudioToolKitRef.current?.getReactData().peakPrecision}`);
+        }else{
+            AudioToolKitRef.current!.getReactData().peakPrecision = numMod;
+            ppRef.current?.setText(`${numMod}`);
+        }
     };
 
 
@@ -181,6 +195,10 @@ const _AudioToolKitControlPanel = forwardRef<AudioToolKitControlPanel>((prop:{},
         <Card cardStyle={css`display:flex;`} tooltipStyle={audioTookKitTooltipBoard} tooltip="每行的高度" >
             <span style={{ marginRight: '0.25em' }}>行高: </span>
             <TextCard editable ref={hgRef} onChanged={onHgChange} cardStyle={textCardStyle} content="128" />
+        </Card>
+        <Card cardStyle={css`display:flex;`} tooltipStyle={audioTookKitTooltipBoard} tooltip="peaks的精度 1/x" >
+            <span style={{ marginRight: '0.25em' }}>精度: </span>
+            <TextCard editable ref={hgRef} onChanged={onPpChange} cardStyle={textCardStyle} content="128" />
         </Card>
     </Card>;
 });

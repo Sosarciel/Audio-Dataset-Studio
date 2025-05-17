@@ -46,17 +46,16 @@ type AudioToolKitData = {
     additionalTime: number;
     /**行高 */
     lineHeight: number;
+    /**peak精度 */
+    peakPrecision: number;
     /**选中的srtLine */
     currentSrtLine: SrtLineContainer|undefined;
 };
 const AudioToolKitData:AudioToolKitData = {
-    /**吸附步长精度 小于0则不启用 */
     stepPrecision: 0.1,
-    /**追加时间 */
     additionalTime: 0,
-    /**行高 */
     lineHeight: 128,
-    /**选中的srtLine */
+    peakPrecision:128,
     currentSrtLine: undefined,
 };
 

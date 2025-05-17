@@ -93,7 +93,9 @@ export async function loadWaveform(waveform:WaveSurfer,data:AudioFileData,useCac
                 const dur = waveform.getDuration();
                 //peak精度为1/256
                 reslove({
-                    peaks:waveform.exportPeaks({maxLength:dur*256}),
+                    peaks:waveform.exportPeaks({
+                        maxLength:dur*(AudioToolKitRef.current?.getReactData().peakPrecision ?? 128)
+                    }),
                     dur,
                 });
             });
