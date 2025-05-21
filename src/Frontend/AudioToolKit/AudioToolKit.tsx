@@ -39,7 +39,7 @@ export type AudioToolKit = {
     setCurrentSrtLine:(srtLine?:SrtLineContainer)=>void;
 };
 
-type AudioToolKitData = {
+export type AudioToolKitData = {
     /**吸附步长精度 小于0则不启用 */
     stepPrecision: number;
     /**追加时间 */
@@ -50,6 +50,10 @@ type AudioToolKitData = {
     peakPrecision: number;
     /**选中的srtLine */
     currentSrtLine: SrtLineContainer|undefined;
+    /**波形缩放 */
+    vScale:number;
+    /**静音阈值 (dB)*/
+    muteThreshhold: number;
 };
 const AudioToolKitData:AudioToolKitData = {
     stepPrecision: 0.1,
@@ -57,6 +61,8 @@ const AudioToolKitData:AudioToolKitData = {
     lineHeight: 128,
     peakPrecision:128,
     currentSrtLine: undefined,
+    muteThreshhold: -100,
+    vScale:1,
 };
 
 const _AudioToolKit = forwardRef((props:{},ref:Ref<AudioToolKit>) => {
