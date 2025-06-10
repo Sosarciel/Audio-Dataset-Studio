@@ -47,7 +47,7 @@
   "dependencies": {
     "@zwa73/audio-utils": "^1.0.21",
     "@zwa73/js-utils": "^1.0.26",
-    "@zwa73/react-utils": "^1.0.1",
+    "@zwa73/react-utils": "^1.0.3",
     "@zwa73/utils": "^1.0.221",
     "electron-squirrel-startup": "^1.0.1",
     "path-browserify": "^1.0.1",

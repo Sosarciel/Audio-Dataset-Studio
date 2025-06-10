@@ -18,10 +18,10 @@ const cardStyle = css`
     border-radius: 8px;
     padding: 0.5em;
     height: 44px;
-    &>*{
+    && > *{
         margin-right: 0.5em;
     }
-    &>:last-child{
+    && > :last-child{
         margin-right: 0em;
     }
     text-align: flex-start;
@@ -46,10 +46,10 @@ const saveModalCardStyle = css`
     border-radius: 8px;
     padding: 0.5em;
 
-    &>*{
+    && > *{
         margin-right: 0.25em;
     }
-    &>:last-child{
+    && > :last-child{
         margin-right: 0em;
     }
 `;

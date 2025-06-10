@@ -24,10 +24,10 @@ const cardStyle = css`
     text-align: left;
 
     padding: 0.5em;
-    &>*{
+    && > *{
         margin-right: 0.5em;
     }
-    &>:last-child{
+    && > :last-child{
         margin-right: 0em;
     }
 `;

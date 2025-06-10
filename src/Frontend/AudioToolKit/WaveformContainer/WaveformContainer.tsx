@@ -25,10 +25,10 @@ const Box = styled.div`
     background-color: var(--background-color-2);
     overflow-y: auto;
 
-    & > * {
+    && > * {
         border-top: 2px solid saddlebrown;
     }
-    & > :first-child {
+    && > :first-child {
         border-top: 0px;
     }
 `;
