@@ -9,7 +9,6 @@ import { SrtLineControlPanle } from "./SrtLineControlPanle";
 import WaveSurfer from "wavesurfer.js";
 import { AudioToolKitRef } from "../AudioToolKit";
 import { SrtSegment } from "@zwa73/utils";
-import { createRoot, Root } from "react-dom/client";
 
 export type SrtLineContainerProps = {
     audioData:AudioFileData;
@@ -49,9 +48,10 @@ export type SrtLineContainerData = {
     segmentsIndex:number;
     mainRegion?:Region;
     waveform?:WaveSurfer;
-    contentRoot?:Root;
     /**缩放修正 */
     zoomBonus:number;
+    /**析构函数 */
+    dcoList:(()=>void)[];
 };
 
 /**计算焦点位置数据 */
@@ -91,6 +91,7 @@ export const SrtLineContainer= forwardRef((props:SrtLineContainerProps,ref:Ref<S
         duration       : 1,
         isAlign        : false,
         zoomBonus      : 0.5,
+        dcoList       : []
     });
 
     useEffect(() => {
@@ -99,6 +100,7 @@ export const SrtLineContainer= forwardRef((props:SrtLineContainerProps,ref:Ref<S
 
         waveform.on('ready',()=>{
             const cur = datas.current;
+            //建立区域
             cur.mainRegion = region.addRegion({
                 start :srtSegment.start/1000,
                 end   :srtSegment.end  /1000,
@@ -106,20 +108,73 @@ export const SrtLineContainer= forwardRef((props:SrtLineContainerProps,ref:Ref<S
                 contentEditable:true,
                 content:srtSegment.text,
                 drag:false,
-                color: 'rgba(200, 200, 200, 0.5)'
+                color: 'rgba(200, 200, 200, 0.5)',
             });
 
-            datas.current.contentRoot = createRoot(cur.mainRegion.content!);
-            const elements = srtSegment.text
+            const contentBlock = cur.mainRegion.content!;
+            const formatElement = (srt:SrtSegment)=>srtSegment.text
                 .split("\n")
                 .reduce<JSX.Element[]>((acc, str, index) => {
                     //console.log(str);
-                    acc.push(<React.Fragment key={Math.random()}>{str}</React.Fragment>);
+                    acc.push(<span
+                        style={{
+                            color: "cyan",
+                            textShadow: "0 0 1px black",
+                            pointerEvents: "none",   // 禁用鼠标事件
+                        }}
+                        spellCheck={false}   // 关闭拼写检查
+                        key={Math.random()}>{str}</span>);
                     if (index < srtSegment.text.split("\n").length - 1)
                         acc.push(<br key={Math.random()} />);
                     return acc;
                 }, []);
-            datas.current.contentRoot.render(elements);
+            //datas.current.contentRoot = createRoot(cur.mainRegion.content!);
+            //datas.current.contentRoot.render(formatElement(srtSegment));
+
+            const createSpan = (text?:string)=>{
+                const span = document.createElement("span");
+                span.style.color = "cyan";
+                span.style.textShadow = "0 0 1px black";
+                span.style.pointerEvents = "none";
+                span.spellcheck = false;
+                span.style.whiteSpace = "pre-line";
+                if(text) span.textContent = text;
+                return span;
+            };
+
+            const handlerBlur = () => {
+                requestAnimationFrame(() => {
+                    const newText = localRef.current?.getSrtData();
+                    if (!newText) return;
+
+                    // 清空原有内容
+                    while (contentBlock.firstChild)
+                        contentBlock.removeChild(contentBlock.firstChild);
+                    // 插入新的 DOM 节点
+                    contentBlock.appendChild(createSpan(newText.text));
+                });
+            };
+            const handlePaste = (e:ClipboardEvent) => {
+                e.preventDefault();
+                const text = e.clipboardData?.getData("text/plain");
+                if (text) {
+                    // 在光标位置插入纯文本
+                    document.execCommand("insertText", false, text);
+                }
+            };
+
+            // 绑定事件
+            contentBlock.addEventListener("blur", handlerBlur);
+            contentBlock.addEventListener("paste", handlePaste);
+            cur.dcoList.push(
+                () => contentBlock.removeEventListener("blur", handlerBlur),
+                () => contentBlock.removeEventListener("paste", handlePaste)
+            );
+
+            // 初始渲染
+            while (contentBlock.firstChild)
+                contentBlock.removeChild(contentBlock.firstChild);
+            contentBlock.appendChild(createSpan(srtSegment.text));
 
             cur.mainRegion.on("update-end",()=>{
                 //取整吸附
@@ -159,7 +214,7 @@ export const SrtLineContainer= forwardRef((props:SrtLineContainerProps,ref:Ref<S
                     cur.waveform?.setScroll(pos);
             });
 
-            containerRef.current?.addEventListener("click", e => {
+            const handlerClick = () => {
                 const cur = waveformContainer.current;
                 cur.getSrtLines().forEach(srt=>{
                     if(srt.ref.current?.getData().segmentsIndex == datas.current.segmentsIndex)
@@ -174,7 +229,9 @@ export const SrtLineContainer= forwardRef((props:SrtLineContainerProps,ref:Ref<S
                         srt.ref.current?.pause();
                     });
                 });
-            });
+            };
+            containerRef.current?.addEventListener("click", handlerClick);
+            cur.dcoList.push(()=>containerRef.current?.removeEventListener('click',handlerClick));
 
             //初始对焦
             if(containerRef.current==undefined) return;
@@ -209,6 +266,7 @@ export const SrtLineContainer= forwardRef((props:SrtLineContainerProps,ref:Ref<S
             waveform.empty();
             region.destroy();
             waveform.destroy();
+            datas.current.dcoList.forEach(v=>v());
         };
     }, []);
 
