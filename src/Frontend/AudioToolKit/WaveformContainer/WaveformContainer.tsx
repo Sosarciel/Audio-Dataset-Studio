@@ -1,5 +1,4 @@
-import React, { ReactNode, Ref, RefObject, createRef, forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
-import styled from "styled-components";
+import { ReactNode, Ref, RefObject, createRef, forwardRef, useCallback, useEffect, useRef, useState } from "react";
 import { getWaveform, loadWaveform } from "../Util";
 import { UtilRH, UtilRT } from "@zwa73/react-utils";
 import { SrtLineContainer } from "./SrtLineContainer";
@@ -8,11 +7,11 @@ import { WaveformControlPanel } from "./WaveformControlPanel";
 import { SavedAudioData, SavedLineData } from "@/src/Backend/ProjectData";
 import { AudioToolKitRef, BridgeProxy } from "Frontend";
 import { SrtSegment } from "@zwa73/utils";
-import { SliceData } from "@/src/Backend/Util";
 import path from 'pathe';
+import styled from "@emotion/styled";
 
 const Box = styled.div`
-    width: calc(100% - 10px);
+    width: calc(100% - 10px); //减去 margin * 2
     align-items: center;
     position: relative;
     padding: 0px;
@@ -25,11 +24,8 @@ const Box = styled.div`
     background-color: var(--background-color-2);
     overflow-y: auto;
 
-    && > * {
+    & > :not(:first-child) {
         border-top: 2px solid saddlebrown;
-    }
-    && > :first-child {
-        border-top: 0px;
     }
 `;
 

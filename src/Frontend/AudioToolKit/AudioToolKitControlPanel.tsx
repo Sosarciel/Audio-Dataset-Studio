@@ -1,29 +1,25 @@
-import { Button, Card, Modal, TextCard } from "@zwa73/react-utils";
-import { createRef, forwardRef,Ref, useRef } from "react";
-import { css } from "styled-components";
+import { SButton, SCard, Modal, TextCard } from "@zwa73/react-utils";
+import { createRef, forwardRef, Ref, useRef } from "react";
 import { audioTookKitTooltipBoard } from "./AudioTookKitInterface";
 import { AudioToolKitData, AudioToolKitFileTable, AudioToolKitRef } from "./AudioToolKit";
 import { BridgeProxy } from "../ContextProxy";
 import path from 'pathe';
+import { Box, styled } from "@mui/material";
+import { css } from "@emotion/react";
 
 
 
-const cardStyle = css`
+const Topbar = styled(Box)`
     background-color: var(--background-color-2);
     display: flex;
-    overflow-x: hidden; /* 隐藏横向溢出 */
+    overflow: hidden; /* 隐藏横向溢出 */
     white-space: nowrap; /* 防止换行 */
     text-align: left;
     border: 2px solid saddlebrown;
     border-radius: 8px;
     padding: 0.5em;
     height: 44px;
-    && > *{
-        margin-right: 0.5em;
-    }
-    && > :last-child{
-        margin-right: 0em;
-    }
+    gap: 0.5em;
     text-align: flex-start;
     align-items: flex-start;
     justify-content: flex-start;
@@ -35,6 +31,7 @@ const textCardStyle = css`
 const textCardMinStyle = css`
     width: 2.5em;
 `;
+
 
 //#region save
 const saveModalInputStyle = css`
@@ -178,43 +175,43 @@ const _AudioToolKitControlPanel = forwardRef<AudioToolKitControlPanel>((prop:{},
         );
     };
 
-    return <Card cardStyle={cardStyle}>
-        <Button content="保存工程" tooltip="将项目保存到文件" onClick={save} tooltipStyle={audioTookKitTooltipBoard}/>
+    return <Topbar>
+        <SButton content="保存工程" tooltip="将项目保存到文件" onClick={save} tooltipStyle={audioTookKitTooltipBoard}/>
         <Modal ref={saveModalRef} cardStyled={saveModalCardStyle}>
             <div>{"保存路径:"}</div>
             <TextCard tooltip="输入保存的文件路径" tooltipStyle={audioTookKitTooltipBoard}
                 ref={savePathCardRef} editable={true} cardStyle={saveModalInputStyle}/>
-            <Button content="保存" tooltip="将项目保存到文件" onClick={modalSave} tooltipStyle={audioTookKitTooltipBoard}/>
+            <SButton content="保存" tooltip="将项目保存到文件" onClick={modalSave} tooltipStyle={audioTookKitTooltipBoard}/>
         </Modal>
-        <Button content="加载工程" tooltip="从文件加载项目" tooltipStyle={audioTookKitTooltipBoard}/>
-        <Button content="保存Srt" tooltip="全部保存为srt" onClick={allSave} tooltipStyle={audioTookKitTooltipBoard}/>
-        <Button content="清空"     tooltip="清空全部音频" onClick={clear} tooltipStyle={audioTookKitTooltipBoard}/>
-        <Button content="切换对齐" tooltip="切换对齐状态" onClick={changeAlign} tooltipStyle={audioTookKitTooltipBoard}/>
-        <Card cardStyle={css`display:flex;`} tooltipStyle={audioTookKitTooltipBoard} tooltip="设置吸附步长精度, 小于0则不启用" >
+        <SButton content="加载工程" tooltip="从文件加载项目" tooltipStyle={audioTookKitTooltipBoard}/>
+        <SButton content="保存Srt" tooltip="全部保存为srt" onClick={allSave} tooltipStyle={audioTookKitTooltipBoard}/>
+        <SButton content="清空"     tooltip="清空全部音频" onClick={clear} tooltipStyle={audioTookKitTooltipBoard}/>
+        <SButton content="切换对齐" tooltip="切换对齐状态" onClick={changeAlign} tooltipStyle={audioTookKitTooltipBoard}/>
+        <SCard cardStyle={css`display:flex;`} tooltipStyle={audioTookKitTooltipBoard} tooltip="设置吸附步长精度, 小于0则不启用" >
             <span style={{ marginRight: '0.25em' }}>取整: </span>
             <TextCard editable ref={spRef} onChanged={onSpChanged} cardStyle={textCardStyle} content="0.1" />
-        </Card>
-        <Card cardStyle={css`display:flex;`} tooltipStyle={audioTookKitTooltipBoard} tooltip="震幅缩放" >
+        </SCard>
+        <SCard cardStyle={css`display:flex;`} tooltipStyle={audioTookKitTooltipBoard} tooltip="震幅缩放" >
             <span style={{ marginRight: '0.25em' }}>缩放: </span>
             <TextCard editable ref={vsRef} onChanged={onVsChange} cardStyle={textCardMinStyle} content="1" />
-        </Card>
-        <Card cardStyle={css`display:flex;`} tooltipStyle={audioTookKitTooltipBoard} tooltip="若最后一段的结束点等同于音频长度, 则保存srt时会将其延长一定时间" >
+        </SCard>
+        <SCard cardStyle={css`display:flex;`} tooltipStyle={audioTookKitTooltipBoard} tooltip="若最后一段的结束点等同于音频长度, 则保存srt时会将其延长一定时间" >
             <span style={{ marginRight: '0.25em' }}>追加: </span>
             <TextCard editable ref={apRef} onChanged={onApChanged} cardStyle={textCardMinStyle} content="0" />
-        </Card>
-        <Card cardStyle={css`display:flex;`} tooltipStyle={audioTookKitTooltipBoard} tooltip="每行的高度" >
+        </SCard>
+        <SCard cardStyle={css`display:flex;`} tooltipStyle={audioTookKitTooltipBoard} tooltip="每行的高度" >
             <span style={{ marginRight: '0.25em' }}>行高: </span>
             <TextCard editable ref={hgRef} onChanged={onHgChange} cardStyle={textCardMinStyle} content="128" />
-        </Card>
-        <Card cardStyle={css`display:flex;`} tooltipStyle={audioTookKitTooltipBoard} tooltip="peaks的精度 1/x" >
+        </SCard>
+        <SCard cardStyle={css`display:flex;`} tooltipStyle={audioTookKitTooltipBoard} tooltip="peaks的精度 1/x" >
             <span style={{ marginRight: '0.25em' }}>精度: </span>
             <TextCard editable ref={ppRef} onChanged={onPpChange} cardStyle={textCardMinStyle} content="128" />
-        </Card>
-        <Card cardStyle={css`display:flex;`} tooltipStyle={audioTookKitTooltipBoard} tooltip="静音阈值 (dB) -100时视为无" >
+        </SCard>
+        <SCard cardStyle={css`display:flex;`} tooltipStyle={audioTookKitTooltipBoard} tooltip="静音阈值 (dB) -100时视为无" >
             <span style={{ marginRight: '0.25em' }}>阈值: </span>
             <TextCard editable ref={mtRef} onChanged={onMtChange} cardStyle={textCardMinStyle} content="-100" />
-        </Card>
-    </Card>;
+        </SCard>
+    </Topbar>;
 });
 
 export const {AudioToolKitControlPanelRef,AudioToolKitControlPanelElement} = (()=>{

@@ -14,12 +14,11 @@
         "strict": true,
         "jsx": "react-jsx",
         "paths": {
-            "*": ["node_modules/*"],
             "@/src/*": ["./src/*"],
             "@/*": ["./*"],
             "@": ["./src/index"],
             "Backend" : ["src/Backend"],
-            "Frontend": ["./src/Frontend"]
+            "Frontend": ["./src/Frontend"],
         }
     },
     "include": [

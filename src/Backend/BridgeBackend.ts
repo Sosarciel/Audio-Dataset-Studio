@@ -3,6 +3,7 @@ import { IpcMainInvokeEvent, app } from "electron";
 import fs from 'fs';
 import { splitAudioByData } from "./Util";
 
+
 /**桥函数化 */
 const bridgeify = <F extends (...args: any[]) => any>(func:F):
     F extends (...args:infer IN)=>infer OUT

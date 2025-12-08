@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client';
-import { AudioToolKitElement,AudioToolKitControlPanelElement } from 'Frontend';
+import { App } from 'Frontend';
 import { UtilRT } from '@zwa73/react-utils';
 
 UtilRT.setStyleVar(document.documentElement,{
@@ -12,9 +12,4 @@ UtilRT.setStyleVar(document.documentElement,{
 });
 const container = document.getElementById('app-root')!;
 const root = createRoot(container);
-root.render(
-<>
-    {AudioToolKitControlPanelElement}
-    {AudioToolKitElement}
-</>
-);
+root.render(<App />);

@@ -1,6 +1,6 @@
 import React, { ReactNode, Ref, createRef, forwardRef, useEffect, useImperativeHandle, useState } from "react";
-import styled from "styled-components";
-import { WaveformContainer} from "./WaveformContainer";
+import styled from "@emotion/styled";
+import { WaveformContainer } from "./WaveformContainer";
 import { UtilRH, UtilRT } from "@zwa73/react-utils";
 import { AudioFileData, SrtFileData } from "./AudioTookKitInterface";
 import { getFileData } from "./Util";

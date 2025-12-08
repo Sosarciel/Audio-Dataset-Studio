@@ -3,12 +3,14 @@ import { AudioFileData } from "../AudioTookKitInterface";
 import { getWaveform, loadWaveform } from "../Util";
 import type { Region } from "wavesurfer.js/dist/plugins/regions";
 import { WaveformContainer } from "./WaveformContainer";
-import styled, { css } from "styled-components";
-import { Card, UtilRH } from "@zwa73/react-utils";
+import { UtilRH } from "@zwa73/react-utils";
 import { SrtLineControlPanle } from "./SrtLineControlPanle";
 import WaveSurfer from "wavesurfer.js";
 import { AudioToolKitRef } from "../AudioToolKit";
 import { SrtSegment } from "@zwa73/utils";
+import { css } from "@emotion/react";
+import styled from "@emotion/styled";
+import { SCard } from "@zwa73/react-utils";
 
 export type SrtLineContainerProps = {
     audioData:AudioFileData;
@@ -351,9 +353,9 @@ export const SrtLineContainer= forwardRef((props:SrtLineContainerProps,ref:Ref<S
         }
     }),[]);
 
-    return <Card cardStyle={cardStyle}>
+    return <SCard cardStyle={cardStyle}>
         <SrtLineControlPanle srtLineContainer={localRef} waveformContainer={waveformContainer} ref={panelRef}/>
         <WaveformBox ref={containerRef} />
-    </Card>;
+    </SCard>;
 });
 
