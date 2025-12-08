@@ -13,7 +13,9 @@ export const db2amp = JsFunc.memoize((db:number) => {
     return Math.pow(10, db / 20);
 });
 
-const renderFilter = (val:number) => Math.abs(val)>=db2amp((AudioToolKitRef.current?.getReactData().muteThreshhold??0));
+/**过滤声音太低的部分 */
+const renderFilter = (val:number) =>
+    Math.abs(val)>=db2amp((AudioToolKitRef.current?.getReactData().muteThreshhold??0));
 
 
 export function getWaveform(container:HTMLDivElement){
@@ -21,7 +23,8 @@ export function getWaveform(container:HTMLDivElement){
     const waveform = WaveSurfer.create({
         container,
         waveColor: "steelblue",
-        progressColor: "lightblue",
+        progressColor: "#4A6B8A",
+        cursorColor: "lightblue",
         backend: "MediaElement",
         dragToSeek:true,
         autoScroll:false,
