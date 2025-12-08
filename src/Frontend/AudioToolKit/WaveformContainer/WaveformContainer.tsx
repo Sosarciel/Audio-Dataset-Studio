@@ -25,7 +25,7 @@ const Wavbox = styled(Box)`
     background-color: var(--background-color-2);
     overflow-y: auto;
 
-    & > :not(:first-child) {
+    & > :not(:first-of-type) {
         border-top: 2px solid saddlebrown;
     }
 `;

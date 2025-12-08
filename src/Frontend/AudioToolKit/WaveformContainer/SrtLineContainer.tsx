@@ -122,7 +122,7 @@ export const SrtLineContainer= forwardRef((props:SrtLineContainerProps,ref:Ref<S
                     //console.log(str);
                     acc.push(<span
                         style={{
-                            color: "cyan",
+                            color: "#2F4F4F",
                             textShadow: "0 0 1px black",
                             pointerEvents: "none",   // 禁用鼠标事件
                         }}
@@ -137,7 +137,7 @@ export const SrtLineContainer= forwardRef((props:SrtLineContainerProps,ref:Ref<S
 
             const createSpan = (text?:string)=>{
                 const span = document.createElement("span");
-                span.style.color = "cyan";
+                span.style.color = "#FAFAF5";
                 span.style.textShadow = "0 0 1px black";
                 span.style.pointerEvents = "none";
                 span.spellcheck = false;
