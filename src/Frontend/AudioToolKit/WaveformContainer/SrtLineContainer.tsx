@@ -118,7 +118,7 @@ export const SrtLineContainer= forwardRef((props:SrtLineContainerProps,ref:Ref<S
                     //console.log(str);
                     acc.push(<span
                         style={{
-                            color: "cyan",
+                            color: "#FAFAF5",
                             textShadow: "0 0 1px black",
                             pointerEvents: "none",   // 禁用鼠标事件
                         }}

@@ -20,8 +20,8 @@ export function getWaveform(container:HTMLDivElement){
     const region = regions.create();
     const waveform = WaveSurfer.create({
         container,
-        waveColor: "steelblue",
-        progressColor: "lightblue",
+        waveColor: "#4083AB",
+        progressColor: "#40AB83",
         backend: "MediaElement",
         dragToSeek:true,
         autoScroll:false,

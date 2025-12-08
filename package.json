@@ -1,7 +1,7 @@
 {
   "name": "audio-dataset-studio",
   "productName": "audio-dataset-studio",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "My Electron application description",
   "main": ".webpack/main",
   "scripts": {
@@ -46,9 +46,10 @@
   "license": "MIT",
   "dependencies": {
     "@zwa73/audio-utils": "^1.0.21",
-    "@zwa73/js-utils": "^1.0.26",
+    "@zwa73/js-utils": "^1.0.70",
+    "@zwa73/modular-mixer": "^1.0.9",
     "@zwa73/react-utils": "^1.0.3",
-    "@zwa73/utils": "^1.0.221",
+    "@zwa73/utils": "^1.0.275",
     "electron-squirrel-startup": "^1.0.1",
     "path-browserify": "^1.0.1",
     "pathe": "^2.0.2",
