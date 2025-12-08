@@ -4,7 +4,7 @@ import { SrtLineContainer } from "./SrtLineContainer";
 import { audioTookKitTooltipBoard } from "../AudioTookKitInterface";
 import { WaveformContainer } from "./WaveformContainer";
 import { AudioToolKitRef } from "../AudioToolKit";
-import { css } from "@emotion/react";
+import { css } from "@mui/styled-engine";
 import { SButton, SCard } from "@zwa73/react-utils";
 
 const baseCardStyle = css`

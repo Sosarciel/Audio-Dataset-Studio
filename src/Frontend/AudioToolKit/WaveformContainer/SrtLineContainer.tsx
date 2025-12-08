@@ -8,9 +8,11 @@ import { SrtLineControlPanle } from "./SrtLineControlPanle";
 import WaveSurfer from "wavesurfer.js";
 import { AudioToolKitRef } from "../AudioToolKit";
 import { SrtSegment } from "@zwa73/utils";
-import { css } from "@emotion/react";
-import styled from "@emotion/styled";
+import { css } from "@mui/styled-engine";
 import { SCard } from "@zwa73/react-utils";
+import styled from "@mui/styled-engine";
+import { Box } from "@mui/material";
+
 
 export type SrtLineContainerProps = {
     audioData:AudioFileData;
@@ -79,7 +81,7 @@ const cardStyle = css`
     background-color: var(--background-color-3);
 `;
 
-const WaveformBox = styled.div`
+const WaveformBox = styled(Box)`
     width: calc( 100% - 4rem - 2px );
     box-sizing: border-box;
 `;

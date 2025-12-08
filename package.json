@@ -46,10 +46,12 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@mui/material": "^7.3.6",
+    "@mui/styled-engine": "^7.3.6",
     "@zwa73/audio-utils": "^1.0.21",
     "@zwa73/js-utils": "^1.0.69",
     "@zwa73/modular-mixer": "^1.0.8",
-    "@zwa73/react-utils": "file:../SosarcielCore/NodeJs/workspace/react-utils/zwa73-react-utils-1.0.4.tgz",
+    "@zwa73/react-utils": "^1.0.5",
     "@zwa73/utils": "^1.0.274",
     "electron-squirrel-startup": "^1.0.1",
     "path-browserify": "^1.0.1",

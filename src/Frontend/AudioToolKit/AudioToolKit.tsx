@@ -1,5 +1,4 @@
 import React, { ReactNode, Ref, createRef, forwardRef, useEffect, useImperativeHandle, useState } from "react";
-import styled from "@emotion/styled";
 import { WaveformContainer } from "./WaveformContainer";
 import { UtilRH, UtilRT } from "@zwa73/react-utils";
 import { AudioFileData, SrtFileData } from "./AudioTookKitInterface";
@@ -7,9 +6,11 @@ import { getFileData } from "./Util";
 import { BridgeProxy } from "Frontend";
 import { SavedProjectData } from "@/src/Backend/ProjectData";
 import { SrtLineContainer } from "./WaveformContainer/SrtLineContainer";
+import styled from "@mui/styled-engine";
+import { Box } from "@mui/material";
 
 
-const Container = styled.div`
+const Container = styled(Box)`
     display: block;
     height: calc(100% - 44px);
     width: 100%;

@@ -8,9 +8,10 @@ import { SavedAudioData, SavedLineData } from "@/src/Backend/ProjectData";
 import { AudioToolKitRef, BridgeProxy } from "Frontend";
 import { SrtSegment } from "@zwa73/utils";
 import path from 'pathe';
-import styled from "@emotion/styled";
+import styled from "@mui/styled-engine";
+import { Box } from "@mui/material";
 
-const Box = styled.div`
+const Wavbox = styled(Box)`
     width: calc(100% - 10px); //减去 margin * 2
     align-items: center;
     position: relative;
@@ -46,7 +47,7 @@ export type SrtLines = {
 }[];
 
 
-const WaveformBox = styled.div`
+const WaveformBox = styled(Box)`
     width: calc( 100% );
     align-items: center;
     position: relative;
@@ -188,7 +189,7 @@ export const WaveformContainer= forwardRef((props:WaveformContainerProps,ref:Ref
         },
     }),[srtLines]);
 
-    return <Box
+    return <Wavbox
         onDrop={UtilRT.preventDefaultEvent}
         onDragOver={UtilRT.preventDefaultEvent}
     >
@@ -197,6 +198,6 @@ export const WaveformContainer= forwardRef((props:WaveformContainerProps,ref:Ref
             ? [srtLines.map(l=>l.node)]
             : <WaveformBox ref={containerRef} />
         }
-    </Box>;
+    </Wavbox>;
 });
 
