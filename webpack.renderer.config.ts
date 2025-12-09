@@ -10,6 +10,7 @@ rules.push({
 });
 
 export const rendererConfig: Configuration = {
+  experiments: { asyncWebAssembly: true },
   module: {
     rules,
   },
