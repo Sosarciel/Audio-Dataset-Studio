@@ -104,7 +104,7 @@
 ### 安装与运行
 
 ```bash
-npm install
+npm install # 更推荐使用 npm ci 直接安装package-lock
 npm start
 ```
 
